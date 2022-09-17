@@ -1,4 +1,5 @@
 ﻿#include <iostream>
+#include <fstream>
 
 using namespace std;
 
@@ -19,10 +20,10 @@ int main()
 {
 	setlocale(LC_ALL, "rus");
 
-	cout << "Введите очтавшиеся цифры:";
-
+	ifstream fin("input.txt");
+	
 	int digit;
-	cin >> digit;
+	fin >> digit;
 	int sum_d = sum_digit(digit);
 	int res = sum_d;
 	while (res % 9 != 0)
@@ -30,5 +31,8 @@ int main()
 		res++;
 	}
 
-	cout << "Зачеркнутая цифра:" << res - sum_d << endl;
+	ofstream fout("output.txt");
+
+	fout << "Зачеркнутая цифра:" << res - sum_d << endl;
+	fout.close();
 }
