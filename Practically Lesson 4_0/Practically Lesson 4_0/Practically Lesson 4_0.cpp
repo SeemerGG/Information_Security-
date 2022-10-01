@@ -29,6 +29,23 @@ bool next_set(int *answer, int n, int m)
 	return true;
 }
 
+bool check(int* answer, int m)
+{
+	int count7 = 0, count5 = 0, count2 = 0;
+	for (int i = 0; i < m; i++)
+	{
+		if (answer[i] == 1)
+			count7++;
+		if (answer[i] == 2)
+			count5++;
+		if (answer[i] == 3)
+			count2++;
+	}
+	if (count7 == 4 && count5 == 2 && count2 == 2)
+		return true;
+	return false;
+}
+
 void print(ofstream &fout, int *answer, int m)
 {
 	for (int i = 0; i < m; i++)
@@ -52,7 +69,8 @@ int main()
 
 	while (next_set(answer, 3, 8))
 	{
-		print(fout, answer, 8);
+		if(check(answer, 8))
+			print(fout, answer, 8);
 	}
 	
 	fout.close();
