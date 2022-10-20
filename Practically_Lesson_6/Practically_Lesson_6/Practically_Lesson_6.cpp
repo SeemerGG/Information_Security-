@@ -27,7 +27,39 @@ bool search_LO_LS(int n, int m, vector<vector<string>>& A, vector<int>& LO, vect
     LO.clear();
     LS.clear();
 
+    for (int i = 0; i < m; i++)
+    {
+        int level_s = 1;
+        for (int j = 0; j < n; j++)
+        {
+            if (!(A[j][i] == "r"))
+            {
+                level_s++;
+            }
+        }
+        LS.push_back(level_s);
+    }
 
+    for (int i = 0; i < n; i++)
+    {
+        int level_o = 1;
+        for (int j = 0; j < m; j++)
+        {
+            if (A[i][j] == "r")
+            {
+                level_o += 1;
+            }
+            if (A[i][j] == "rw" && LS[j] != level_o)
+            {
+                level_o = LS[j];
+                break;
+            }
+            if(A[i][j] )
+        }
+
+        LO.push_back(level_o);
+    }
+    return check_CS(n, m, A, LO, LS);
 }
 int main()
 {
@@ -72,7 +104,14 @@ int main()
         }
         cout << endl;
     }
-    cout << check_CS(n, m, A, LO, LS);
+    cout << check_CS(n, m, A, LO, LS) << endl;
+    cout << search_LO_LS(n, m, A, LO, LS) << endl;
+    for (int i = 0; i < m; i++)
+        cout << LS[i];
+    cout << endl;
+    for (int i = 0; i < n; i++)
+        cout << LO[i];
+
 
 }
 
