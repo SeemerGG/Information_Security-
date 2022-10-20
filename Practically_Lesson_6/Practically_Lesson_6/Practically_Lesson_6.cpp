@@ -5,21 +5,34 @@
 
 using namespace std;
 
-// s[i] >= o[j] - можно читать  s[i] <= o[j] - можно писать; A[i][j] = "r" or "w" or "rw"
+// s[i] >= o[j] - можно читать  s[i] <= o[j] - можно писать; A[i][j] = "r" or "w"
 
 bool check_CS(int n, int m, vector<vector<string>>  A, vector<int> LO, vector<int> LS)
 {
+    bool flag = 1;
+    vector<string> error;
+    int num = 0;
     for (int i = 0;i < n; i++)
     {
         for (int j = 0;j < m; j++)
         {
-            if ((LS[j] == LO[i] && A[i][j] != "rw") || (LS[j] < LO[i] && A[i][j] != "r") || (LS[j] > LO[i] && A[i][j] != "w"))
+            if ((LS[j] <= LO[i] && A[i][j] != "r") || (LS[j] > LO[i] && A[i][j] != "w"))
             {
-                return false;
+                num++;
+                error.push_back("Error security " + to_string(num) + ": NumS = " + to_string(j) + " NumO = " + to_string(i));
+                flag = false;
             }
         }
     }
-    return true;
+    
+    if (flag == false)
+    {
+        for (int i = 0; i < error.size(); i++)
+        {
+            cout << error[i] << endl;
+        }
+    }
+    return flag;
 }
 
 bool search_LO_LS(int n, int m, vector<vector<string>>& A, vector<int>& LO, vector<int>& LS)
@@ -37,7 +50,9 @@ bool search_LO_LS(int n, int m, vector<vector<string>>& A, vector<int>& LO, vect
                 level_s++;
             }
         }
+
         LS.push_back(level_s);
+
     }
 
     for (int i = 0; i < n; i++)
@@ -45,21 +60,17 @@ bool search_LO_LS(int n, int m, vector<vector<string>>& A, vector<int>& LO, vect
         int level_o = 1;
         for (int j = 0; j < m; j++)
         {
-            if (A[i][j] == "r")
-            {
-                level_o += 1;
-            }
-            if (A[i][j] == "rw" && LS[j] != level_o)
+            if ((A[i][j] == "r") && LS[j] > level_o)
             {
                 level_o = LS[j];
-                break;
             }
-            if(A[i][j] )
         }
 
         LO.push_back(level_o);
     }
+
     return check_CS(n, m, A, LO, LS);
+
 }
 int main()
 {
