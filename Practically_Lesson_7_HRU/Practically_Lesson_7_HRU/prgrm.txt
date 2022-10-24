@@ -1,0 +1,3 @@
+if w 0 0 cds 2
+cer w 0 1
+cer r 0 1
