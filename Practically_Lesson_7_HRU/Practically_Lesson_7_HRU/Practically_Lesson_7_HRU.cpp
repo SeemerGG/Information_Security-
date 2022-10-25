@@ -13,6 +13,51 @@ private:
     vector<vector<set<char>>> A_old;
     int n, m;
 
+    
+
+public:
+    HRU(string file_name) //файл оканчивается табуляцией 
+    {   
+        ifstream fin(file_name);
+        if (fin.is_open())
+        {
+            fin >> n;
+            fin >> m;
+            char  sym;
+            fin.get(sym);
+            for (int i = 0; i < n; i++)
+            {
+                vector<set<char>> buf;
+                set<char> buf_set;
+                while (true)
+                {
+                    fin.get(sym);
+                    if (sym == '\n')
+                    {
+                        buf.push_back(buf_set);
+                        A.push_back(buf);
+                        break;
+                    }
+                    if (sym == ' ')
+                    {
+                        buf.push_back(buf_set);
+                        buf_set.clear();
+                    }
+                    else
+                    {
+                        buf_set.insert(sym);
+                    }
+                }
+            }
+            copy(A.begin(), A.end(), back_inserter(A_old));
+        }
+        else
+        {
+            cout << "File not found!";
+            terminate();
+        }
+    }
+
     void create_obj()
     {
         if (m + 1 <= A_old[0].size())
@@ -53,7 +98,7 @@ private:
 
     void destroy_obj(int k)
     {
-        if (k < m) 
+        if (k < m)
         {
             for (auto i : A)
             {
@@ -67,7 +112,7 @@ private:
         {
             cout << "Command not executed!" << endl;
         }
-        
+
     }
 
     void destroy_sbj(int k)
@@ -112,311 +157,118 @@ private:
         }
     }
 
-    void determing_op(ifstream &fin, string com)
-    {
-        if (com == "cco")
-        {
-            create_obj();
-        }
-        if (com == "ccs")
-        {
-            create_sub();
-        }
-        if (com == "cdo")
-        {
-            int i;
-            fin >> i;
-            destroy_obj(i);
-        }
-        if (com == "cds")
-        {
-            int i;
-            fin >> i;
-            destroy_sbj(i);
-        }
-        if (com == "cer")
-        {
-            char p;
-            int i, j;
-            fin >> p >> i >> j;
-            enter_p(p, i, j);
-        }
-        if (com == "cdr")
-        {
-            char p;
-            int i, j;
-            fin >> p >> i >> j;
-            delete_p(p, i, j);
-        }
-    }
-
-    void output_res()
-    {
-        ofstream fout("rzlt.txt");
-        for (auto i : A)
+    friend ostream& operator<<(ostream& out, HRU& h) {
+        for (auto i : h.A)
         {
             for (auto j : i)
             {
                 for (auto l : j)
                 {
-                    fout << l;
+                    out << l;
                 }
-                fout << " ";
+                out << " ";
             }
-            fout << endl;
+            out << endl;
         }
+
+        return out;
+    }
+
+    void output_res()
+    {
+        ofstream fout("rzlt.txt");
+        fout << *this;
         fout.close();
     }
 
-    //Задание 2
-    vector<int> a()
+    set<char> output_p(int i, int j)
     {
-        bool flag;
-        vector<int> buf;
-        for (int j = 0; j < m; j++)
-        {
-            flag = true;
-            for (int i = 0; i < n; i++)
-            {
-                if (!A[i][j].empty())
-                {
-                    flag = false;
-                    break;
-                }
-            }
-            if (flag)
-            {
-                buf.push_back(j);
-            }
-        }
-        return buf;
-    }
-
-    vector<int> b()
-    {
-        bool flag;
-        vector<int> buf;
-        for (int i = 0; i < n; i++)
-        {
-            flag = true;
-            for (int j = 0; j < m; j++)
-            {
-                if (!A[i][j].empty())
-                {
-                    flag = false;
-                    break;
-                }
-            }
-            if (flag)
-            {
-                buf.push_back(i);
-            }
-        }
-        return buf;
-    }
-
-    vector<int> c()
-    {
-        bool flag;
-        vector<int> buf;
-        for (int i = 0; i < n; i++)
-        {
-            flag = true;
-            for (int j = 0; j < m; j++)
-            {
-                if (A[i][j].empty() || (A[i][j].contains('w') && !A[i][j].contains('r')) || (!A[i][j].contains('w') && A[i][j].contains('r')))
-                {
-                    flag = false;
-                    break;
-                }
-            }
-            if (flag)
-            {
-                buf.push_back(i);
-            }
-        }
-        return buf;
-    }
-
-    vector<vector<int>> d()
-    {
-        vector<vector<int>> buf;
-        for (int j = 0; j < m; j++)
-        {
-            vector<int> buf1;
-            for (int i = 0; i < n; i++)
-            {
-                if (A[i][j].contains('w'))
-                {
-                    buf1.push_back(i);
-                }
-            }
-            buf.push_back(buf1);
-        }
-        return buf;
-    }
-
-    vector<int> e()
-    {
-        bool flag;
-        vector<int> buf;
-        for (int i = 0; i < n; i++)
-        {
-            flag = true;
-            int count = 0;
-            for (int j = 0; j < m; j++)
-            {
-                if (A[i][j].contains('w') && A[i][j].contains('r'))
-                {
-                    count++;
-                }
-                else if (A[i][j].contains('w'))
-                {
-                    flag = false;
-                }
-            }
-            if (flag && count == 1)
-            {
-                buf.push_back(i);
-            }
-        }
-        return buf;
-    }
-    void output_vector_int(vector<int> buf)
-    {
-        for (int i = 0; i < buf.size(); i++)
-        {
-            cout << buf[i] << " ";
-        }
-        cout << endl;
-    }
-
-public:
-    HRU(string file_name) //файл оканчивается табуляцией 
-    {   
-        ifstream fin(file_name);
-        if (fin.is_open())
-        {
-            fin >> n;
-            fin >> m;
-            char  sym;
-            fin.get(sym);
-            for (int i = 0; i < n; i++)
-            {
-                vector<set<char>> buf;
-                set<char> buf_set;
-                while (true)
-                {
-                    fin.get(sym);
-                    if (sym == '\n')
-                    {
-                        buf.push_back(buf_set);
-                        A.push_back(buf);
-                        break;
-                    }
-                    if (sym == ' ')
-                    {
-                        buf.push_back(buf_set);
-                        buf_set.clear();
-                    }
-                    else
-                    {
-                        buf_set.insert(sym);
-                    }
-                }
-            }
-            copy(A.begin(), A.end(), back_inserter(A_old));
-        }
-        else
-        {
-            cout << "File not found!";
-            exit;
-        }
-    }
-
-    void interpretator(string file_name)
-    {
-        ifstream fin(file_name);
-        if (fin.is_open())
-        {
-            while (!fin.eof())
-            {
-                string str;
-                fin >> str;
-                if (str == "if")
-                {
-                    char p;
-                    int i, j;
-                    fin >> p >> i >> j;
-                    if (A[i][j].contains(p))
-                    {
-                        string com;
-                        fin >> com;
-                        determing_op(fin, com);
-                    }
-                    else
-                    {
-                        fin.ignore(numeric_limits<streamsize> :: max(), '\n');
-                    }
-                }
-                else
-                {
-                    determing_op(fin, str);
-                }
-            }
-            output_res();
-        }
-        else
-        {
-            cout << "File is not find!" << endl;
-            exit;
-        }
-    }
-
-    void output()
-    {
-        for (int i = 0; i < n; i++)
-        {
-            for (int j = 0; j < m; j++)
-            {
-                for (auto i : A[i][j])
-                    cout << i;
-                cout << " ";
-            } 
-            cout << endl;
-        }
-    }
-
-    void task2()
-    {
-        vector<int> buf = a();
-        cout << "a) ";
-        output_vector_int(buf);
-        buf = b();
-        cout << "b) ";
-        output_vector_int(buf);
-        buf = c();
-        cout << "c) ";
-        output_vector_int(buf);
-        vector<vector<int>> buf2 = d();
-        cout << "d) " << endl;
-        for (int i = 0; i < buf2.size(); i++)
-        {
-            output_vector_int(buf2[i]);
-        }
-        buf = e();
-        cout << "e) ";
-        output_vector_int(buf);
+        return A[i][j];
     }
 
 };
 
+void determing_op(ifstream& fin, string com, HRU& obj)
+{
+    if (com == "cco")
+    {
+        obj.create_obj();
+    }
+    if (com == "ccs")
+    {
+        obj.create_sub();
+    }
+    if (com == "cdo")
+    {
+        int i;
+        fin >> i;
+        obj.destroy_obj(i);
+    }
+    if (com == "cds")
+    {
+        int i;
+        fin >> i;
+        obj.destroy_sbj(i);
+    }
+    if (com == "cer")
+    {
+        char p;
+        int i, j;
+        fin >> p >> i >> j;
+        obj.enter_p(p, i, j);
+    }
+    if (com == "cdr")
+    {
+        char p;
+        int i, j;
+        fin >> p >> i >> j;
+        obj.delete_p(p, i, j);
+    }
+}
+
+void interpretator(string file_name, HRU &obj)
+{
+    ifstream fin(file_name);
+    if (fin.is_open())
+    {
+        while (!fin.eof())
+        {
+            string str;
+            fin >> str;
+            if (str == "if")
+            {
+                char p;
+                int i, j;
+                fin >> p >> i >> j;
+                if (obj.output_p(i,j).contains(p))
+                {
+                    string com;
+                    fin >> com;
+                    determing_op(fin, com, obj);
+                }
+                else
+                {
+                    fin.ignore(numeric_limits<streamsize> ::max(), '\n');
+                }
+            }
+            else
+            {
+                determing_op(fin, str, obj);
+            }
+        }
+        obj.output_res();
+    }
+    else
+    {
+        cout << "File is not find!" << endl;
+        terminate();
+    }
+}
+
 int main()
 {
     HRU hru1("environ.txt");
-    hru1.interpretator("prgrm.txt");
-    //hru1.output();
-    HRU ne_hru("access_matr.txt");
-    ne_hru.task2();
-    
+    cout << hru1;
+    interpretator("prgrm.txt", hru1); 
+    cout << hru1;
 }
