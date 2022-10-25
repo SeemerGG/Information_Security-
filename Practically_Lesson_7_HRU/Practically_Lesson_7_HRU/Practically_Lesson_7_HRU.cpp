@@ -10,56 +10,106 @@ class HRU
 {
 private:
     vector<vector<set<char>>> A;
+    vector<vector<set<char>>> A_old;
     int n, m;
 
     void create_obj()
     {
-        for (int i = 0; i < n; i++)
+        if (m + 1 <= A_old[0].size())
         {
-            set<char> buf;
-            A[i].push_back(buf);
+            for (int i = 0; i < n; i++)
+            {
+                set<char> buf;
+                A[i].push_back(buf);
+            }
+            m++;
+            cout << "Command executed!" << endl;
         }
-        m++;
+        else
+        {
+            cout << "Command not executed!" << endl;
+        }
     }
 
     void create_sub()
     {
-        vector<set<char>> buf;
-        for (int i = 0; i < m; i++)
+        if (n + 1 <= A_old.size())
         {
-            set<char> buf_set;
-            buf.push_back(buf_set);
+            vector<set<char>> buf;
+            for (int i = 0; i < m; i++)
+            {
+                set<char> buf_set;
+                buf.push_back(buf_set);
+            }
+            A.push_back(buf);
+            n++;
+            cout << "Command executed!" << endl;
         }
-        A.push_back(buf);
-        n++;
+        else
+        {
+            cout << "Command not executed!" << endl;
+        }
     }
 
     void destroy_obj(int k)
     {
-        for (auto i : A)
+        if (k < m) 
         {
-            auto iter = i.cbegin();
-            i.erase(iter + k);
+            for (auto i : A)
+            {
+                auto iter = i.cbegin();
+                i.erase(iter + k);
+            }
+            m--;
+            cout << "Command executed!" << endl;
         }
-        m--;
+        else
+        {
+            cout << "Command not executed!" << endl;
+        }
+        
     }
 
     void destroy_sbj(int k)
     {
-        auto iter = A.cbegin();
-        A.erase(iter + k);
-        n--;
+        if (k < n)
+        {
+            auto iter = A.cbegin();
+            A.erase(iter + k);
+            n--;
+            cout << "Command executed!" << endl;
+        }
+        else
+        {
+            cout << "Command not executed!" << endl;
+        }
 
     }
 
     void enter_p(char p, int k, int l)
     {
-        A[k][l].insert(p);
+        if (A_old[k][l].contains(p))
+        {
+            A[k][l].insert(p);
+            cout << "Command executed!" << endl;
+        }
+        else
+        {
+            cout << "Command not executed!" << endl;
+        }
     }
 
     void delete_p(char p, int k, int l)
     {
-        A[k][l].erase(p);
+        if (A[k][l].contains(p))
+        {
+            A[k][l].erase(p);
+            cout << "Command executed!" << endl;
+        }
+        else
+        {
+            cout << "Command not execeted!" << endl;
+        }
     }
 
     void determing_op(ifstream &fin, string com)
@@ -275,6 +325,7 @@ public:
                     }
                 }
             }
+            copy(A.begin(), A.end(), back_inserter(A_old));
         }
         else
         {
@@ -288,7 +339,6 @@ public:
         ifstream fin(file_name);
         if (fin.is_open())
         {
-            int num_cm = 1;
             while (!fin.eof())
             {
                 string str;
@@ -303,19 +353,15 @@ public:
                         string com;
                         fin >> com;
                         determing_op(fin, com);
-                        num_cm++;
                     }
                     else
                     {
-                        cout << "Command " << num_cm << "not executed!" << endl;
                         fin.ignore(numeric_limits<streamsize> :: max(), '\n');
-                        num_cm++;
                     }
                 }
                 else
                 {
                     determing_op(fin, str);
-                    num_cm++;
                 }
             }
             output_res();
@@ -369,7 +415,7 @@ int main()
 {
     HRU hru1("environ.txt");
     hru1.interpretator("prgrm.txt");
-    hru1.output();
+    //hru1.output();
     HRU ne_hru("access_matr.txt");
     ne_hru.task2();
     
