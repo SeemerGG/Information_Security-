@@ -21,7 +21,7 @@ public:
     {
         try
         {
-            ifstream fin(file_name);
+            ifstream fin(file_name + ".txt");
             if (fin.is_open())
             {
                 fin >> n >> m;
@@ -47,7 +47,7 @@ public:
                             buf.insert(rules[0]);
                         }
                         A[pair(i, j)] = buf;
-                        fin.ignore(1, '\n');
+                        //fin.ignore(1, '\n');
                         buf.clear();
                     }
                     A_old = A;
@@ -73,9 +73,10 @@ public:
 
     void add_rule(int i, int j, char p)
     {
-        if (A_old[pair(i, j)].contains(p) && active_sbj.contains(i))
+        pair<int, int> pair = make_pair(i, j);
+        if (A_old[pair].contains(p) && active_sbj.contains(i))
         {
-            A[pair(i, j)].insert(p);
+            A[pair].insert(p);
             cout << "Command executed!" << endl;
         }
         else
@@ -86,9 +87,14 @@ public:
 
     void del_rule(int i, int j, char p)
     {
-        if (active_sbj.contains(i) && A.contains(pair(i, j)))
+        pair<int, int> pair = make_pair(i, j);
+        if (active_sbj.contains(i) && A.contains(pair))
         {
-             A[pair(i, j)].erase(p);
+             A[pair].erase(p);
+             if (A[pair].empty())
+             {
+                 A.erase(pair);
+             }
              cout << "Command executed!" << endl;
         }
         else
@@ -104,7 +110,7 @@ public:
             if (!active_sbj.contains(i))
             {
                 active_sbj.insert(i);
-                cout << name << " has been registrated as " << i;
+                cout << name << " has been registrated as " << i << endl;
                 return;
             }
         }
@@ -117,9 +123,10 @@ public:
         {
             for (int j = 0; j < m; j++)
             {
-                if (A.contains(pair(i, j)))
+                pair<int, int> pair = make_pair(i, j);
+                if (A.contains(pair))
                 {
-                    A[pair(i, j)].clear();
+                    A.erase(pair);
                 }
             }
             active_sbj.erase(i);
@@ -141,9 +148,9 @@ public:
         return m;
     }
 
-    int count_active_sbj()
+    int out_size()
     {
-        return active_sbj.size();
+        return A.size();
     }
 
     vector<int> users_obj_t(int t)
@@ -151,9 +158,10 @@ public:
         vector<int> buf;
         for (auto i : active_sbj)
         {
-            if (A.contains(pair(i, t)))
+            pair<int, int> pair = make_pair(i, t);
+            if (A.contains(pair))
             {
-                if (!A[pair(i, t)].empty())
+                if (!A[pair].empty())
                 {
                     buf.push_back(i);
                 }
@@ -169,17 +177,53 @@ public:
         }
     }
 
+    friend ostream& operator<<(ostream& out, TAM sys)
+    {
+        for (auto i : sys.A)
+        {
+            out << i.first.first << " " << i.first.second << " ";
+            for (auto j : i.second)
+            {
+                out << j;
+            }
+            out << endl;
+        }
+        return out;
+    }
+
+    void output_file(string file_name)
+    {
+        ofstream fout(file_name + ".txt");
+        fout << *this;
+        fout.close();
+    }
+
 };
 
 float perc_occupancy(TAM sys)
 {
-    return sys.count_active_sbj() * 100.0 / (sys.out_n() * sys.out_m());
+    return sys.out_size() * 100.0 / (sys.out_n() * sys.out_m());
 }
-
 
 int main()
 {
-    TAM chw1("input.txt");
-    //chw1.add_sub("Bell");
-    //vector<int> fjd = chw1.users_obj_t(1);
+    TAM chw1("input");
+    cout << chw1;
+    chw1.delete_sub(1);
+    cout << chw1;
+    chw1.add_sub("Van");
+    cout << chw1;
+    chw1.add_rule(1, 1, 'w');
+    cout << chw1;
+    chw1.del_rule(0, 1, 'w');
+    cout << chw1;
+    chw1.output_file("rezult");
+    vector<int> vector = chw1.users_obj_t(2);
+    for (auto i : vector)
+    {
+        cout << i << " ";
+    }
+    cout << endl;
+    cout << "Filling is the matrix: " << perc_occupancy(chw1) << "%";
+
 }

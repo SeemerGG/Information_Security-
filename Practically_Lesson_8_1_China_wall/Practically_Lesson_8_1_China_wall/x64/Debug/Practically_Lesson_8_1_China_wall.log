@@ -1,4 +1,5 @@
 ﻿  Practically_Lesson_8_1_China_wall.cpp
-C:\Users\Владимир\Documents\GitHub\Information_Security-\Practically_Lesson_8_1_China_wall\Practically_Lesson_8_1_China_wall\Practically_Lesson_8_1_China_wall.cpp(146,1): warning C4267: return: преобразование из "size_t" в "int"; возможна потеря данных
-C:\Users\Владимир\Documents\GitHub\Information_Security-\Practically_Lesson_8_1_China_wall\Practically_Lesson_8_1_China_wall\Practically_Lesson_8_1_China_wall.cpp(176,43): warning C4244: return: преобразование "double" в "float", возможна потеря данных
+C:\Users\Владимир\Documents\GitHub\Information_Security-\Practically_Lesson_8_1_China_wall\Practically_Lesson_8_1_China_wall\Practically_Lesson_8_1_China_wall.cpp(153,1): warning C4267: return: преобразование из "size_t" в "int"; возможна потеря данных
+C:\Users\Владимир\Documents\GitHub\Information_Security-\Practically_Lesson_8_1_China_wall\Practically_Lesson_8_1_China_wall\Practically_Lesson_8_1_China_wall.cpp(205,35): warning C4244: return: преобразование "double" в "float", возможна потеря данных
+C:\Users\Владимир\Documents\GitHub\Information_Security-\Practically_Lesson_8_1_China_wall\Practically_Lesson_8_1_China_wall\Practically_Lesson_8_1_China_wall.cpp(178): warning C4715: TAM::users_obj_t: значение возвращается не при всех путях выполнения
   Practically_Lesson_8_1_China_wall.vcxproj -> C:\Users\Владимир\Documents\GitHub\Information_Security-\Practically_Lesson_8_1_China_wall\x64\Debug\Practically_Lesson_8_1_China_wall.exe
