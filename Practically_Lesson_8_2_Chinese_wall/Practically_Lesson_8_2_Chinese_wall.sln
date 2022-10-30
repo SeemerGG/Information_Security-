@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32929.385
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Practically_Lesson_8_2_Chinese_wall", "Practically_Lesson_8_2_Chinese_wall\Practically_Lesson_8_2_Chinese_wall.vcxproj", "{74993D6F-6AD3-4856-882B-C81C85A22CBB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{74993D6F-6AD3-4856-882B-C81C85A22CBB}.Debug|x64.ActiveCfg = Debug|x64
+		{74993D6F-6AD3-4856-882B-C81C85A22CBB}.Debug|x64.Build.0 = Debug|x64
+		{74993D6F-6AD3-4856-882B-C81C85A22CBB}.Debug|x86.ActiveCfg = Debug|Win32
+		{74993D6F-6AD3-4856-882B-C81C85A22CBB}.Debug|x86.Build.0 = Debug|Win32
+		{74993D6F-6AD3-4856-882B-C81C85A22CBB}.Release|x64.ActiveCfg = Release|x64
+		{74993D6F-6AD3-4856-882B-C81C85A22CBB}.Release|x64.Build.0 = Release|x64
+		{74993D6F-6AD3-4856-882B-C81C85A22CBB}.Release|x86.ActiveCfg = Release|Win32
+		{74993D6F-6AD3-4856-882B-C81C85A22CBB}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FB9DB43F-D369-4EA7-9A2B-72991E7E8F12}
+	EndGlobalSection
+EndGlobal
