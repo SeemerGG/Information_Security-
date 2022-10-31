@@ -1,0 +1,13 @@
+3
+8
+6
+GasProm 0 1
+LuCoil 2
+SberBank 3 4
+AlfaBank 5
+Yandex-market 6
+Sber-market 7
+3
+GasProm LuCoil
+SberBank AlfaBank
+Yandex-market Sber-market
