@@ -62,6 +62,13 @@ static const uint Rcon[] = {
         0x36000000
 };
 
+uint LeadingZeroCount(uint x) {
+    for (int i = 31; i >= 0; i--)
+        if (x & (1ull << i))
+            return 31 - i;
+    return 32;
+}
+
 uint SwapToBe(uint x) {
     if constexpr (endian::native == endian::little)
         x = ((x & 0xff) << 24) | ((x & 0xff00) << 8) | ((x & 0xff0000) >> 8) | ((x & 0xff000000) >> 24);
@@ -81,7 +88,7 @@ uchar Mult(uchar op1, uchar op2) {
             result = Sum(result, op2 << i);
 
     while (result >= 256) {
-        int d = 31 - __lzcnt(result);
+        int d = 31 - LeadingZeroCount(result);
         result = Sum(result, p << (d - 8));
     }
 
@@ -305,20 +312,19 @@ void print_hex(string_view sv) {
 }
 
 int main() {
-   
-
+    setlocale(LC_ALL, "rus");
     const char* raw_key = "0123456789ABCDEF";
     uchar key[kBlockSize];
     for (int i = 0; i < kBlockSize; i++)
         key[i] = raw_key[i];
 
     string raw_text = "HELLOWORD";
-    cout << "Raw text:" << raw_text << endl;
+    cout << "Исходное сообщение:" << raw_text << endl;
 
     string enc_text = Encrypt(raw_text, key);
-    cout << "Encrypted text:" << enc_text << endl;
+    cout << "Зашифрованное сообщение:" << enc_text << endl;
 
     string dec_text = Decrypt(enc_text, key);
-    cout << "Decrypted text:" << dec_text << endl;
+    cout << "Расшифрованное сообщение:" << dec_text << endl;
 
 }
