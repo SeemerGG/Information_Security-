@@ -2,7 +2,6 @@
 #include<string>
 #include<iomanip>
 #include<bit>
-#include<intrin.h>
 using namespace std;
 
 using uchar = uint8_t;
@@ -229,7 +228,7 @@ void EncryptBlock(const uchar* in, uchar* out, const uint w[Nb * (Nr + 1)]) {
             out[r + 4 * c] = state[r][c];
 }
 
-// Block == 128 bit == 16 byte
+
 void DecryptBlock(const uchar* in, uchar* out, const uint w[Nb * (Nr + 1)]) {
     uchar state[Nk][Nb];
 
@@ -256,8 +255,8 @@ void DecryptBlock(const uchar* in, uchar* out, const uint w[Nb * (Nr + 1)]) {
 }
 
 string Encrypt(string_view text, const uchar key[kBlockSize]) {
-    uchar* raw_result = new uchar[(text.size() / kBlockSize + 1) * kBlockSize + 1];
-    raw_result[(text.size() / kBlockSize + 1) * kBlockSize] = 0;
+    uchar* raw_result = new uchar[(text.size() / (kBlockSize + 1) + 1) * kBlockSize + 1];
+    raw_result[(text.size() / (kBlockSize + 1) + 1) * kBlockSize] = 0;
     uint w[Nb * (Nr + 1)];
     KeyExpansion(key, w);
 
@@ -281,8 +280,8 @@ string Encrypt(string_view text, const uchar key[kBlockSize]) {
 }
 
 string Decrypt(string_view crypt_text, const uchar key[kBlockSize]) {
-    uchar* raw_result = new uchar[(crypt_text.size() / kBlockSize + 1) * kBlockSize + 1];
-    raw_result[(crypt_text.size() / kBlockSize + 1) * kBlockSize] = 0;
+    uchar* raw_result = new uchar[(crypt_text.size() / (kBlockSize + 1) +1) * kBlockSize + 1];
+    raw_result[(crypt_text.size() / (kBlockSize + 1) + 1) * kBlockSize] = 0;
     uint w[Nb * (Nr + 1)];
     KeyExpansion(key, w);
 
@@ -305,21 +304,19 @@ string Decrypt(string_view crypt_text, const uchar key[kBlockSize]) {
     return result;
 }
 
-void print_hex(string_view sv) {
-    for (int i = 0; i < sv.size(); i++)
-        cout << hex << "0x" << ((uint)sv[i] & 0xff) << " ";
-    cout << endl;
-}
-
 int main() {
     setlocale(LC_ALL, "rus");
+    
+
     const char* raw_key = "0123456789ABCDEF";
     uchar key[kBlockSize];
     for (int i = 0; i < kBlockSize; i++)
         key[i] = raw_key[i];
 
-    string raw_text = "HELLOWORD";
-    cout << "Исходное сообщение:" << raw_text << endl;
+    string raw_text;
+    cout << "Исходное сообщение: ";
+
+    cin >> raw_text;
 
     string enc_text = Encrypt(raw_text, key);
     cout << "Зашифрованное сообщение:" << enc_text << endl;
